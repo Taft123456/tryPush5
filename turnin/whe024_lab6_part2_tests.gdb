@@ -1,0 +1,78 @@
+# Test file for Lab6_SynchSMs
+
+
+# commands.gdb provides the following functions for ease:
+#   test "<message>"
+#       Where <message> is the message to print. Must call this at the beginning of every test
+#       Example: test "PINA: 0x00 => expect PORTC: 0x01"
+#   checkResult
+#       Verify if the test passed or failed. Prints "passed." or "failed." accordingly, 
+#       Must call this at the end of every test.
+#   expectPORTx <val>
+#       With x as the port (A,B,C,D)
+#       The value the port is epected to have. If not it will print the erroneous actual value
+#   setPINx <val>
+#       With x as the port or pin (A,B,C,D)
+#       The value to set the pin to (can be decimal or hexidecimal
+#       Example: setPINA 0x01
+#   printPORTx f OR printPINx f 
+#       With x as the port or pin (A,B,C,D)
+#       With f as a format option which can be: [d] decimal, [x] hexadecmial (default), [t] binary 
+#       Example: printPORTC d
+#   printDDRx
+#       With x as the DDR (A,B,C,D)
+#       Example: printDDRB
+
+echo ======================================================\n
+echo Running all tests for lab6-part2..."\n\n
+
+# Add tests below
+# Test sequence from START: no input => PORTB: 0x04
+test "PINA: 0x00 => PORTB: 0x04, state: THREE"
+set state = START
+setPINA 0x00
+continue 3
+expectPORTB 0x04
+checkResult
+
+# Test sequence from PAUSE: no input, A0 => PORTB: 0x01
+test "PINA: 0x00, 0x01 => PORTB: 0x01, state: ONE"
+set state = PAUSE
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 1
+expectPORTB 0x01
+checkResult
+
+# Test sequence from PAUSE: no input, A0, no input => PORTB: 0x02
+test "PINA: 0x00, 0x01, 0x00 => PORTB: 0x02, state: TWO"
+set state = PAUSE
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 1
+setPINA 0x00
+continue 1
+expectPORTB 0x02
+checkResult
+
+# Test sequence from PAUSE: no input, A0, no input, no input => PORTB: 0x04
+test "PINA: 0x00, 0x01, 0x00, 0x00 => PORTB: 0x04, state: THREE"
+set state = PAUSE
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 1
+setPINA 0x00
+continue 1
+setPINA 0x00
+continue 1
+expectPORTB 0x04
+checkResult
+
+
+# Report on how many tests passed/tests ran
+set $passed=$tests-$failed
+eval "shell echo Passed %d/%d tests.\n",$passed,$tests
+echo ======================================================\n
