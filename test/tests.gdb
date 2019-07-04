@@ -24,21 +24,47 @@
 #       Example: printDDRB
 
 echo ======================================================\n
-echo Running all tests..."\n\n
+echo Running all tests for lab6-part1..."\n\n
 
-# Example test:
-test "PINA: 0x00, PINB: 0x00 => PORTC: 0"
-# Set inputs
+# Test sequence from ONE: no input => PORTB: 0x01
+test "PINA: 0x00 => PORTB: 0x01, state: ONE"
+set state = ONE
 setPINA 0x00
-setPINB 0x00
-# Continue for several ticks
-continue 2
-# Set expect values
-expectPORTC 0
-# Check pass/fail
+continue 1
+setPINA 0x00
+continue 1
+setPINA 0x00
+continue 1
+expectPORTB 0x01
 checkResult
 
-# Add tests below
+# Test sequence from ONE: no input => PORTB: 0x02
+test "PINA: 0x00 => PORTB: 0x02, state: TWO"
+set state = ONE
+setPINA 0x00
+continue 1
+expectPORTB 0x02
+checkResult
+
+# Test sequence from ONE: no input => PORTB: 0x04
+test "PINA: 0x00 => PORTB: 0x04, state: THREE"
+set state = ONE
+setPINA 0x00
+continue 1
+setPINA 0x00
+continue 1
+expectPORTB 0x04
+checkResult
+
+# Test sequence from Three: no input => PORTB: 0x02
+test "PINA: 0x00 => PORTB: 0x02, state: TWO"
+set state = THREE
+setPINA 0x00
+continue 1
+setPINA 0x00
+continue 1
+expectPORTB 0x02
+checkResult
 
 # Report on how many tests passed/tests ran
 set $passed=$tests-$failed
